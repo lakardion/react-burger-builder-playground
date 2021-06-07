@@ -1,0 +1,12 @@
+.flexContainer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.WholeBurgerContainer {
+  display: flex;
+  flex-flow: wrap;
+  height: 95vh;
+  align-items: center;
+}
