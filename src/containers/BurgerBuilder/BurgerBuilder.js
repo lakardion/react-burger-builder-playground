@@ -157,7 +157,8 @@ class BurgerBuilder extends Component {
 
     return (
       <div className={classes.WholeBurgerContainer}>
-        {modal} {burger}
+        {modal}
+        {burger ? <div className={classes.BurgerFlex}>{burger}</div> : null}
       </div>
     );
   }

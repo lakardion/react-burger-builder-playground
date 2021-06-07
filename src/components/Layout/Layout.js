@@ -16,11 +16,11 @@ const Layout = (props) => {
     }
   };
   return (
-    <Fragment>
+    <div className={classes.AppContainer}>
       <SideDrawer close={sideDrawerClosedHandler} open={show} />
       <Toolbar openSideDrawer={openSideDrawerHandler} />
       <main className={classes.Content}>{props.children}</main>
-    </Fragment>
+    </div>
   );
 };
 

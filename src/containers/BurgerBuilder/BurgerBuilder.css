@@ -6,7 +6,12 @@
 
 .WholeBurgerContainer {
   display: flex;
-  flex-flow: wrap;
-  height: 95vh;
-  align-items: center;
+  margin-top: 3rem;
+  width: 100%;
+}
+
+.BurgerFlex {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 }
