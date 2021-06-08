@@ -2,7 +2,11 @@
   width: 100%;
   border: 1px solid #eee;
   box-shadow: 0 2px 3px #ccc;
-  padding: 10px;
-  margin: 10px auto;
+  padding: 0.5rem;
+  margin: 1rem;
   box-sizing: border-box;
+  height: 13rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
 import { Route } from "react-router";
 import ContactData from "./ContactData/ContactData";
+import classes from "./Checkout.css";
 class Checkout extends Component {
   state = {
     ingredients: {},
@@ -25,7 +26,7 @@ class Checkout extends Component {
   }
   render() {
     return (
-      <div>
+      <div className={classes.CheckoutContainer}>
         <CheckoutSummary
           ingredients={this.state.ingredients}
           cancelOrder={this.cancelOrder}

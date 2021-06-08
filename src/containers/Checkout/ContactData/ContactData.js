@@ -5,6 +5,7 @@ import Input from "../../../components/UI/Input/Input";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./ContactData.css";
 class ContactData extends Component {
+  //TODO: my goodnes remove this, either do formik or some form validation library
   state = {
     orderForm: {
       name: {
@@ -81,11 +82,11 @@ class ContactData extends Component {
             { value: "fastest", displayValue: "Fastest" },
             { value: "Cheapest", displayValue: "Cheapest" },
           ],
-          value: "",
-          validation: {},
-          valid: true,
-          touched: false,
         },
+        value: "fastest",
+        validation: {},
+        valid: true,
+        touched: false,
       },
     },
     formIsValid: false,
@@ -116,7 +117,7 @@ class ContactData extends Component {
     order.price = this.props.price;
     console.log(order);
     this.setState({ loading: true });
-    Axios.post("/orders.json", order)
+    Axios.post("/orders", order)
       .then((r) => {
         this.setState({ loading: false });
         this.props.history.push("/");
@@ -145,6 +146,11 @@ class ContactData extends Component {
 
     let formIsValid = true;
     for (let inputIdentifier in updatedOrderForm) {
+      console.log(
+        inputIdentifier,
+        " is validating as ",
+        updatedOrderForm[inputIdentifier].valid
+      );
       formIsValid = formIsValid && updatedOrderForm[inputIdentifier].valid;
     }
     this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid });
@@ -173,7 +179,7 @@ class ContactData extends Component {
         <Button
           variant="success"
           onClick={this.orderHandler}
-          disabled={!this.state.orderForm.formIsValid}
+          disabled={!this.state.formIsValid}
         >
           ORDER
         </Button>

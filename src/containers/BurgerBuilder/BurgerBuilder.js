@@ -89,7 +89,7 @@ class BurgerBuilder extends Component {
 
   componentDidMount() {
     axios
-      .get("/ingredients.json")
+      .get("/ingredients")
       .then((resp) => {
         this.setState({ ingredients: resp.data });
       })
@@ -97,7 +97,7 @@ class BurgerBuilder extends Component {
         this.setState({ error: true });
       });
     axios
-      .get("/prices.json")
+      .get("/prices")
       .then((resp) => {
         INGREDIENT_PRICES = resp.data;
       })
@@ -156,10 +156,10 @@ class BurgerBuilder extends Component {
     ) : null;
 
     return (
-      <div className={classes.WholeBurgerContainer}>
+      <Fragment>
         {modal}
         {burger ? <div className={classes.BurgerFlex}>{burger}</div> : null}
-      </div>
+      </Fragment>
     );
   }
 }

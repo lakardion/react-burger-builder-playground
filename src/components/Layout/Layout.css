@@ -1,8 +1,11 @@
 .Content {
-  display:flex;
-  height: 100%;
+  display: flex;
+  margin-top: 3rem;
+  flex: 1;
+  width: 100%;
 }
 
-.AppContainer{
+.AppContainer {
   height: 100vh;
+  display: flex;
 }
