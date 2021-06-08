@@ -3,7 +3,7 @@ import classes from "./Layout.css";
 import Toolbar from "../Navigation/Toolbar/Toolbar";
 import SideDrawer from "../Navigation/SideDrawer/SideDrawer";
 
-const Layout = (props) => {
+const Layout = ({children}) => {
   const [show, setShow] = useState(false);
 
   const sideDrawerClosedHandler = () => {
@@ -19,7 +19,7 @@ const Layout = (props) => {
     <div className={classes.AppContainer}>
       <SideDrawer close={sideDrawerClosedHandler} open={show} />
       <Toolbar openSideDrawer={openSideDrawerHandler} />
-      <main className={classes.Content}>{props.children}</main>
+      <main className={classes.Content}>{children}</main>
     </div>
   );
 };

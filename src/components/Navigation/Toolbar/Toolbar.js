@@ -3,10 +3,10 @@ import Logo from "../../Logo/Logo";
 import NavigationItems from "../NavigationItems/NavigationItems";
 import classes from "./Toolbar.css";
 
-const Toolbar = (props) => {
+const Toolbar = ({ openSideDrawer }) => {
   return (
     <header className={classes.Toolbar}>
-      <div onClick={props.openSideDrawer} className={classes.MobileOnly}>
+      <div onClick={openSideDrawer} className={classes.MobileOnly}>
         Menu
       </div>
       <div className={classes.Logo}>

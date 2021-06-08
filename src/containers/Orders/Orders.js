@@ -1,42 +1,42 @@
-import React, { Component } from "react";
-import Order from "../../components/Order/Order";
+import React, { useEffect, useState } from "react";
 import Axios from "../../axios-orders";
+import Order from "../../components/Order/Order";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import WithErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import classes from "./Orders.css";
-class Orders extends Component {
-  state = {
-    orders: [],
-    loading: true,
-  };
-  componentDidMount() {
-    this.setState({ loading: true });
-    Axios.get("/orders")
-      .then((res) => {
-        const orders = Object.keys(res.data).map((rKey) => {
-          return { ...res.data[rKey], id: rKey };
+const Orders = () => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    (async () => {
+      try {
+        const { data } = await Axios.get("orders");
+        const orders = Object.keys(data).map((rKey) => {
+          return { ...data[rKey], id: rKey };
         });
-        this.setState({ loading: false, orders: orders });
-      })
-      .catch((err) => {
-        this.setState({ loading: false });
-      });
-  }
-  render() {
-    let orders = this.state.loading && <Spinner />;
-    if (!this.state.loading) {
-      orders =
-        this.state.orders.length > 0 ? (
-          this.state.orders.map((o) => {
-            return (
-              <Order ingredients={o.ingredients} price={o.price} key={o.id} />
-            );
-          })
-        ) : (
-          <p>You haven't made any orders yet. Get Started!</p>
-        );
-    }
-    return <div className={classes.OrdersContainer}>{orders}</div>;
-  }
-}
+        setOrders(orders);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  return (
+    <div className={classes.OrdersContainer}>
+      {loading ? (
+        <Spinner />
+      ) : orders.length ? (
+        orders.map((o) => (
+          <Order ingredients={o.ingredients} price={o.price} key={o.id} />
+        ))
+      ) : (
+        <p>You haven't made any orders yet. Get Started!</p>
+      )}
+    </div>
+  );
+};
 export default WithErrorHandler(Orders, Axios);

@@ -1,19 +1,19 @@
 import React from "react";
 import classes from "./Input.css";
-const Input = (props) => {
+const Input = ({invalid,inputtype,value,changed,elementConfig,label}) => {
   let inputElement = null;
   let inputClasses = [classes.InputElement];
-  if (props.invalid) {
+  if (invalid) {
     inputClasses.push(classes.Invalid);
   }
-  switch (props.inputtype) {
+  switch (inputtype) {
     case "input":
       inputElement = (
         <input
           className={inputClasses.join(" ")}
-          {...props.elementConfig}
-          value={props.value}
-          onChange={props.changed}
+          {...elementConfig}
+          value={value}
+          onChange={changed}
         />
       );
       break;
@@ -21,16 +21,16 @@ const Input = (props) => {
       inputElement = (
         <textarea
           className={inputClasses.join(" ")}
-          {...props.elementConfig}
-          value={props.value}
-          onChange={props.changed}
+          {...elementConfig}
+          value={value}
+          onChange={changed}
         />
       );
       break;
     case "select":
       inputElement = (
-        <select className={inputClasses.join(" ")} onChange={props.changed}>
-          {props.elementConfig.options.map((op) => (
+        <select className={inputClasses.join(" ")} onChange={changed}>
+          {elementConfig.options.map((op) => (
             <option key={op.value} value={op.value}>
               {op.displayValue}
             </option>
@@ -42,15 +42,15 @@ const Input = (props) => {
       inputElement = (
         <input
           className={inputClasses.join(" ")}
-          {...props.elementConfig}
-          value={props.value}
-          onChange={props.changed}
+          {...elementConfig}
+          value={value}
+          onChange={changed}
         />
       );
   }
   return (
     <div className={classes.Input}>
-      <label className={classes.Label}>{props.label}</label>
+      <label className={classes.Label}>{label}</label>
       {inputElement}
     </div>
   );
