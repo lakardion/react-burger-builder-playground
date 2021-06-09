@@ -1,0 +1,3 @@
+export const INCREASE_PRICE = 'ADD_PRICE' 
+export const DECREASE_PRICE  = 'DECREASE_PRICE'
+export const CLEAR_PRICE = 'CLEAR_PRICE'
