@@ -1,10 +1,27 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { ingredientsReducer } from "../reducers/ingredientsReducer";
-import priceReducer from "../reducers/priceReducer";
+import createSagaMiddleware from "redux-saga";
+import * as sagas from "../sagas";
+import {
+  burgerBuilderStatusesReducer,
+  ingredientPricesReducer,
+  ingredientsReducer,
+  ordersReducer,
+  pricesReducer,
+} from "./reducers";
 
-export default configureStore({
-  reducer: {
-    ingredients: ingredientsReducer,
-    price: priceReducer,
-  },
-});
+const sagaMiddleWare = createSagaMiddleware();
+const getStore = () => {
+  const store = configureStore({
+    reducer: {
+      ingredients: ingredientsReducer,
+      price: pricesReducer,
+      burgerBuilderStatus: burgerBuilderStatusesReducer,
+      ingredientPrices: ingredientPricesReducer,
+      orders: ordersReducer,
+    },
+    middleware: [sagaMiddleWare],
+  });
+  Object.values(sagas).forEach(sagaMiddleWare.run.bind(sagaMiddleWare));
+  return store;
+};
+export default getStore;

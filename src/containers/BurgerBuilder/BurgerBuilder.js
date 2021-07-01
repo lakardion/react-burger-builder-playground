@@ -3,13 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addIngredient,
   clearIngredients,
+  fetchIngredients,
   removeIngredient,
-} from "../../actions/ingredients/actions";
+} from "../../store/actions/ingredients/actions";
 import {
   clearPrice,
-  decreasePrice,
-  increasePrice,
-} from "../../actions/prices/actions";
+  decreaseTotalPrice,
+  fetchPrices,
+  increaseTotalPrice,
+  updateTotalPrice,
+} from "../../store/actions/prices/actions";
 import axios from "../../axios-orders";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
@@ -17,21 +20,22 @@ import OrderSummaryAsClass from "../../components/Burger/OrderSummary/OrderSumma
 import Modal from "../../components/UI/Modal/Modal";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import WithErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import ingredientsSelector from "../../selectors/ingredientsSelector";
-import priceSelector from "../../selectors/priceSelector";
 import classes from "./BurgerBuilder.css";
-
-let INGREDIENT_PRICES = {};
+import {
+  burgerBuilderStatusSelector,
+  ingredientPricesSelector,
+  ingredientsSelector,
+  priceSelector,
+} from "../../store/selectors";
 
 const BurgerBuilder = ({ history }) => {
   const dispatch = useDispatch();
   const ingredients = useSelector(ingredientsSelector);
   const totalPrice = useSelector(priceSelector);
-
+  const { loading, error } = useSelector(burgerBuilderStatusSelector);
+  const ingredientPrices = useSelector(ingredientPricesSelector);
   const [purchasable, setPurchasable] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
 
   const purchaseHandler = () => {
     setPurchasing((prevState) => !prevState);
@@ -44,11 +48,11 @@ const BurgerBuilder = ({ history }) => {
   };
   const addIngredientHandler = (type) => {
     dispatch(addIngredient(type));
-    dispatch(increasePrice(INGREDIENT_PRICES[type]));
+    dispatch(increaseTotalPrice(ingredientPrices[type]));
   };
   const removeIngredientHandler = (type) => {
     dispatch(removeIngredient(type));
-    dispatch(decreasePrice(INGREDIENT_PRICES[type]));
+    dispatch(decreaseTotalPrice(ingredientPrices[type]));
   };
 
   const handleClearIngredients = () => {
@@ -77,25 +81,18 @@ const BurgerBuilder = ({ history }) => {
   }, [ingredients]);
 
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      try {
-        const { data } = await axios.get("ingredients");
-        // setIngredients(data);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-      try {
-        const { data } = await axios.get("prices");
-        INGREDIENT_PRICES = data;
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    })();
+    const igPricesEntries = Object.entries(ingredientPrices);
+    if (!totalPrice && igPricesEntries.length) {
+      const totalPrice = igPricesEntries.reduce((sum, [ig, price], idx) => {
+        return sum + ingredients[ig] * price;
+      }, 0);
+      dispatch(updateTotalPrice(totalPrice));
+    }
+  }, [ingredientPrices]);
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+    dispatch(fetchPrices());
   }, []);
 
   const disabledInfo = { ...ingredients };

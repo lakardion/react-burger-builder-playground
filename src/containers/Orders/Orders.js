@@ -1,28 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Axios from "../../axios-orders";
 import Order from "../../components/Order/Order";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import WithErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
+import { fetchOrders } from "../../store/actions/orders/actions";
+import burgerBuilderStatusSelector from "../../store/selectors/burgerBuilderStatusSelector";
+import ordersSelector from "../../store/selectors/ordersSelector";
 import classes from "./Orders.css";
 const Orders = () => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { loading } = useSelector(burgerBuilderStatusSelector);
+  const orders = useSelector(ordersSelector);
 
   useEffect(() => {
-    setLoading(true);
-    (async () => {
-      try {
-        const { data } = await Axios.get("orders");
-        const orders = Object.keys(data).map((rKey) => {
-          return { ...data[rKey], id: rKey };
-        });
-        setOrders(orders);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    })();
+    dispatch(fetchOrders());
   }, []);
 
   return (
